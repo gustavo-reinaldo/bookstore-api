@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.gustavo.bookstore.domain.Categoria;
@@ -39,5 +40,14 @@ public class CategoriaService {
 		return repository.save(obj);
 	}
 	
+	public void delete(Integer id) {
+		findById(id);
+		try {
+			repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new com.gustavo.bookstore.service.exceptions.DataIntegrityViolationException(
+					"Categoria não pode ser deletada, possui livros associados.");
+		}
+	}
 	
 }
