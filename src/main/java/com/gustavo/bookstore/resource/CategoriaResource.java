@@ -4,8 +4,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +23,7 @@ import com.gustavo.bookstore.domain.Categoria;
 import com.gustavo.bookstore.dtos.CategoriaDTO;
 import com.gustavo.bookstore.service.CategoriaService;
 
+@CrossOrigin("*") // para o endpoint poder receber requisições de diversas outras fontes
 @RestController
 @RequestMapping(value = "/categorias")
 public class CategoriaResource {
@@ -45,7 +49,7 @@ public class CategoriaResource {
 	
 	//criar uma nova categoria
 	@PostMapping
-	public ResponseEntity<Categoria> create(@RequestBody Categoria obj) {
+	public ResponseEntity<Categoria> create(@Valid @RequestBody Categoria obj) {
 		obj = service.create(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
@@ -54,7 +58,7 @@ public class CategoriaResource {
 	
 	//dar update em uma categoria existente
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<CategoriaDTO> update(@PathVariable Integer id, @RequestBody CategoriaDTO objDto) {
+	public ResponseEntity<CategoriaDTO> update(@Valid @PathVariable Integer id, @RequestBody CategoriaDTO objDto) {
 		Categoria newObj = service.update(id, objDto);
 		return ResponseEntity.ok().body(new CategoriaDTO(newObj));
 	}
