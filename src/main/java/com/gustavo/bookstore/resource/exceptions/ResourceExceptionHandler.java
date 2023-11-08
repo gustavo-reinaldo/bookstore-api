@@ -1,7 +1,5 @@
 package com.gustavo.bookstore.resource.exceptions;
 
-import java.util.Iterator;
-
 import javax.servlet.ServletRequest;
 
 import org.springframework.http.HttpStatus;
